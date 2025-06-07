@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with your friends!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div>
+            <a href="index.html">
+                <h1 title="Home">Cha<span style="color: #f77f00">tt</span>er's</h1>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="output" id="chatBox">
+            <!-- Messaggi compariranno qui -->
+        </div>
+
+        <div class="input">
+            <input autocomplete="off" id="output" type="text" placeholder="Write here...">
+            <button id="btn">submit</button>
+            <button id="endBtn" class="end">Termina chat</button>
+        </div>
+    </div>
+    
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
