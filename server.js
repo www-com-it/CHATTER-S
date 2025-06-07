@@ -10,11 +10,8 @@ app.use(express.static('public'));
 
 let waitingUsers = [];
 
-io.on('connection', (socket) => {
-  console.log('Utente connesso:', socket.id);
-  waitingUsers.push(socket);
-
-  if (waitingUsers.length >= 2) {
+function tryToMatchUsers() {
+  while (waitingUsers.length >= 2) {
     const user1 = waitingUsers.shift();
     const user2 = waitingUsers.shift();
 
@@ -25,6 +22,14 @@ io.on('connection', (socket) => {
     user1.emit('matched', { roomId });
     user2.emit('matched', { roomId });
   }
+}
+
+io.on('connection', (socket) => {
+  console.log('Utente connesso:', socket.id);
+  waitingUsers.push(socket);
+
+  waitingUsers.push(socket);
+  tryToMatchUsers();
 
   socket.on("message", ({ roomId, text }) => {
   // Invia il messaggio a tutti tranne chi lo ha inviato
@@ -36,9 +41,15 @@ io.on('connection', (socket) => {
     console.log('Utente disconnesso:', socket.id);
   });
 
-  socket.on("leaveRoom", (roomId) => {
+  socket.on("leaveRoom", ({ roomId, newChat }) => {
   socket.leave(roomId);
   socket.to(roomId).emit("message", { text: "L'altro utente ha terminato la chat." });
+
+  // Se è richiesta una nuova chat
+  if (newChat) {
+    waitingUsers.push(socket);
+    tryToMatchUsers();
+  }
 });
 });
 
